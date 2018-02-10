@@ -47,7 +47,8 @@ func callApiWithCount(count int, client http.Client) []string {
 /*A count value of 11000 gave an average response time of 500ms.
 Disclaimer: This value will differ depending on where and how the webservice is running so a just to be on the safe side a max limit of 10000 was chosen for this api.
 Also if the service is called through a web browser the, it takes the browser to interpret the data being passed to it as a response which significantly reduces load times for the data. Hence, a max
-value of 1001 if the service is being called through the browser.
+value of 1001 if the service is being called through the browser. Another method of testing this is by writing a bash script and using curl statements to test the time. That
+will give a more accurate result.
  */
 func TestApiSpeed (t *testing.T) {
 	client := http.Client{
