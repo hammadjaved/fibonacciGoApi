@@ -9,13 +9,18 @@ import (
 	"bytes"
 	"io/ioutil"
 	"strconv"
+	"github.com/julienschmidt/httprouter"
 )
-
+func setUpApi (){
+	router := httprouter.New()
+	router.GET("/fibonacci/:count", FibonacciApi)
+	log.Fatal(http.ListenAndServe(":9090", router))
+}
 
 func callApiWithCount(count int, client http.Client) []string {
 
 	var buffer bytes.Buffer //create the get request url
-	buffer.WriteString("http://localhost:8080/fibonacci/")
+	buffer.WriteString("http://localhost:9090/fibonacci/")
 	buffer.WriteString(strconv.Itoa(count))
 	url :=  buffer.String()
 
@@ -51,11 +56,12 @@ value of 1001 if the service is being called through the browser. Another method
 will give a more accurate result.
  */
 func TestApiSpeed (t *testing.T) {
+	go setUpApi() 	//run the service asynchronously
+
 	client := http.Client{
 		Timeout: time.Second * 2,
 	} //Initialize the client
 
-	go main() //run the service asynchronously
 
 	for i := 10990; i < 11010 ; i++{
 		start:= time.Now()
@@ -63,13 +69,15 @@ func TestApiSpeed (t *testing.T) {
 		elapsed := time.Since(start)
 		t.Logf("%v took %s\n", i, elapsed)
 	}
+
 }
 
 func TestApiResponse (t *testing.T){
+	go setUpApi() 	//run the service asynchronously
+
 	client := http.Client{
 		Timeout: time.Second * 2,
 	} //Initialize the client
-	go main()
 	testResults := callApiWithCount(1001,client)
 
 	validResultMiddle := "86168291600238450732788312165664788095941068326060883324529903470149056115823592713458328176574447204501"
