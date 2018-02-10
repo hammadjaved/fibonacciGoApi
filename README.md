@@ -1,5 +1,8 @@
-# fibonacciApi
-Top Run the Project run the following commands
+To Run the Project run the following commands
+
+clone the following in required directory git@github.com:julienschmidt/httprouter.git(C:\Go\src\github.com\julienschmidt\httprouter)
+
+export GOBIN=$HOME/work/bin
 
 go install
 
